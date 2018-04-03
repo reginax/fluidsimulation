@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+</style>
+<title>CS 184 Final Project</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+</head>
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2018</h1>
+<h2 align="middle">Final Project | Implementing 2D Grid-Based Fluid Dynamics Simulation</h2>
+<body>
+<br/>
+    <h2>Summary</h2>
+
+    <div class="padded">
+        <p>Using the Navier-Stokes equations, we will be modeling an incompressible, homogeneous fluid in a 2D context. Using GLSL fragment shaders, we’re able to make these calculations in real-time using the GPU, allowing us to make an interactive demonstration of our fluid simulation.</p>
+      <h3>Team Members</h3>
+        <p>
+          Karen Chiao: 25510993<br>
+          Richard Qian: 25294025<br>
+          Regina Xu: 25114199</p>
+      <h3>Problem Description</h3>
+      <p>In this project, we will be attempting to simulate fluid behavior in a 2D context using the Navier-Stokes equations. It’s an interesting problem because it focuses on fluid dynamics, which is something we’ve not worked with, instead having focused on very linear light rays and solid surfaces. Fluid simulations are commonly seen, and making it interactive shows that we’re able to perform the necessary calculations quickly and efficiently. We’re going to approach this problem by using the GLSL fragment shaders used in project 3-2 and making the physics calculations necessary inside the shaders in order to create an interactive model. </p>
+
+          <h2>Goals and Deliverables</h2>
+    <h3>Plan to deliver</h3>
+    <ul>
+      <li>Calculations for Navier-Stokes equations in plain C++</li>
+      <li>GLSL calculations for the Navier-Stokes equations</li>
+      <li>Successful rendering of 2D non-interactive fluids using GPU</li>
+      <li>Successful usage of interaction through GPU to control fluids</li>
+      <li>Image: photo of the fluid mid-motion, hopefully a gif of us interacting with the simulation</li>
+      <li>Demo: able to use mouse cursor to affect the simulated fluid
+</li>
+      <li>Quality/performance: able to render in real-time in order to have good interactivity
+</li>
+      <li>Questions to answer: how to perform fast, possibly complex calculations</li>
+    </ul>
+
+        <h3>Hope to deliver</h3>
+        <ul>
+          <li>Multiple bodies of fluids at the same time</li>
+          <li>Implement compressibility, different conditions, and more</li>
+          <li>Possibly put an object in the scene with the fluid and have the fluid react around it</li>
+        </ul>
+
+      <h2>Schedule</h2>
+          <h3>Week 1: April 1 - April 7</h3>
+          <ul>
+            <li>Research Navier-Stokes equations and pseudocode them</li>
+            <li>Become more familiar with GLSL shaders from project 3-2</li>
+            <li>Await proposal feedback</li>
+          </ul>
+          <h3>Week 2: April 8 - April 14</h3>
+          <ul>
+            <li>First iteration of code for shaders and debug</li>
+            <li>Work on getting non-interactive fluid simulation working</li>
+          </ul>
+          <h3>Week 3: April 15 - April 21</h3>
+          <ul>
+            <li>Second iteration of code for shaders and debug/refactoring</li>
+            <li>Work on getting interactive fluid simulation working</li>
+          </ul>
+          <h3>Week 4: April 22 - April 28 (Milestone week!)</h3>
+          <ul>
+            <li>Turn in milestone paper & catch up on any work left behind</li>
+            <li>If ahead of schedule, work on placing objects/adjusting compressibility</li>
+          </ul>
+          <h3>Week 5: April 29 - May 4 (Presentations + Final deliverables)</h3>
+          <ul>
+            <li>Work on final project presentation and final deliverables</li>
+          </ul>
+      <h2>Resources</h2>
+      <ul>
+        <li>GLSL and openGL basic information given by staff</li>
+        <li>Navier-Stokes equations from Wikipedia and other online resources</li>
+        <li>Platform: Macbook Pro, iOS, mostly using openGL and GLSL fragment shaders</li>
+      </ul>
+    </p>
+</div>
+</body>
+</html>
