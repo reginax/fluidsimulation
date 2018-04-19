@@ -1,0 +1,2 @@
+#!/bin/sh
+make -C /Users/reginax/Downloads/glfw-3.2.1\ 2/build -f /Users/reginax/Downloads/glfw-3.2.1\ 2/build/CMakeScripts/ALL_BUILD_cmakeRulesBuildPhase.make$CONFIGURATION all
