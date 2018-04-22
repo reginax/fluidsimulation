@@ -42,6 +42,7 @@
 		FEFDC7AF208C7845006DA2C9 /* shader1.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader1.frag; sourceTree = "<group>"; };
 		FEFDC7B0208C79A8006DA2C9 /* shader2.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader2.frag; sourceTree = "<group>"; };
 		FEFDC7B2208C815D006DA2C9 /* shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
+		FEFDC7B3208C885E006DA2C9 /* shader3.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader3.vert; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +108,7 @@
 				FEFDC7AD208C6FC0006DA2C9 /* shader1.vert */,
 				FEFDC7AF208C7845006DA2C9 /* shader1.frag */,
 				FEFDC7B0208C79A8006DA2C9 /* shader2.frag */,
+				FEFDC7B3208C885E006DA2C9 /* shader3.vert */,
 			);
 			path = shaders;
 			sourceTree = "<group>";

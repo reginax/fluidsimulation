@@ -13,34 +13,6 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-//struct shaderReader {
-//    shaderReader(std::string);
-//    std::string source;
-//};
-//
-//shaderReader::shaderReader(std::string name) {
-//    std::string line, allLines;
-//    std::ifstream theFile(name);
-//    if (theFile.is_open()) {
-//        while (std::getline(theFile, line)) {
-//            source = source + line + "\n";
-//        }
-//        std::cout << source;
-//        theFile.close();
-//    } else {
-//        std::cout << "Unable to open file " + name + "\n";
-//    }
-//}
-//
-//// load the shaders into shaderReaders
-//shaderReader vs1 = shaderReader("shaders/shader1.vert");
-//shaderReader fs1 = shaderReader("shaders/shader1.frag");
-//shaderReader fs2 = shaderReader("shaders/shader2.frag");
-//// get shaders from shaderReaders
-//const char *vertexShaderSource = vs1.source.c_str();
-//const char *fragmentShaderSource = fs1.source.c_str();
-//const char *fragmentShaderSource2 = fs2.source.c_str();
-
 int main()
 {
     // glfw: initialize and configure
@@ -78,6 +50,7 @@ int main()
     // build and compile our shader program
     Shader shader1("shaders/shader1.vert", "shaders/shader1.frag");
     Shader shader2("shaders/shader1.vert", "shaders/shader2.frag");
+    Shader shader3("shaders/shader3.vert", "shaders/shader1.frag");
     
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -94,6 +67,18 @@ int main()
         1, 3, 4    // second triangle
     };
     
+    // making row of dots
+    float dots[300000];
+    for (int i = 0; i < 1000; ++i) {
+        float xposition = i * 2.0f / 500 - 1.0f;
+        for (int j = 0; j < 100; ++j) {
+            float yposition = j * 2.0f / 500 - 0.1f;
+            dots[3*(100 * i + j)] = xposition;
+            dots[3*(100 * i + j) + 1] = yposition;
+            dots[3*(100 * i + j) + 2] = 0.0f;
+        }
+    }
+    
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -102,7 +87,7 @@ int main()
     glBindVertexArray(VAO);
     
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(dots), dots, GL_STATIC_DRAW);
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -123,40 +108,52 @@ int main()
     
     // render loop
     // -----------
-    while (!glfwWindowShouldClose(window))
-    {
-        // input
-        // -----
+//    while (!glfwWindowShouldClose(window))
+//    {
+//        // input
+//        // -----
+//        processInput(window);
+//
+//        // render
+//        // ------
+//        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+//        glClear(GL_COLOR_BUFFER_BIT);
+//
+//        // time varying color (dynamic)
+//        shader1.use();
+//        float timeValue = glfwGetTime();
+//        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+//        int vertexColorLocation = glGetUniformLocation(shader1.ID, "ourColor");
+//        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+//
+//        // draw our first triangle
+//        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+//        glDrawArrays(GL_TRIANGLES, 0, 3);
+////        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+//
+//        shader2.use();
+//        glBindVertexArray(VAO);
+////        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+//        glDrawArrays(GL_TRIANGLES, 3, 3);
+//        // glBindVertexArray(0); // no need to unbind it every time
+//
+//        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+//        // -------------------------------------------------------------------------------
+//        glfwSwapBuffers(window);
+//        glfwPollEvents();
+//    }
+    
+    while(!glfwWindowShouldClose(window)) {
         processInput(window);
-        
-        // render
-        // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        
-        // time varying color (dynamic)
-//        glUseProgram(shaderProgram);
-        shader1.use();
+        shader3.use();
         float timeValue = glfwGetTime();
-        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-        int vertexColorLocation = glGetUniformLocation(shader1.ID, "ourColor");
-        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-        
-        // draw our first triangle
-//        glUseProgram(shaderProgram);
-        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-//        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-        
-//        glUseProgram(shaderProgram2);
-        shader2.use();
+        float timeCount = timeValue;
+        int vertexLocation = glGetUniformLocation(shader3.ID, "time");
+        glUniform1f(vertexLocation, timeCount);
         glBindVertexArray(VAO);
-//        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-        glDrawArrays(GL_TRIANGLES, 3, 3);
-        // glBindVertexArray(0); // no need to unbind it every time
-        
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
+        glDrawArrays(GL_POINTS, 0, 300000);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
