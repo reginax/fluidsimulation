@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <fstream>
+#include <math.h>
+#include "shader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -11,33 +13,33 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-struct shaderReader {
-    shaderReader(std::string);
-    std::string source;
-};
-
-shaderReader::shaderReader(std::string name) {
-    std::string line, allLines;
-    std::ifstream theFile(name);
-    if (theFile.is_open()) {
-        while (std::getline(theFile, line)) {
-            source = source + line + "\n";
-        }
-        std::cout << source;
-        theFile.close();
-    } else {
-        std::cout << "Unable to open file " + name + "\n";
-    }
-}
-
-// load the shaders into shaderReaders
-shaderReader vs1 = shaderReader("shaders/shader1.vert");
-shaderReader fs1 = shaderReader("shaders/shader1.frag");
-shaderReader fs2 = shaderReader("shaders/shader2.frag");
-// get shaders from shaderReaders
-const char *vertexShaderSource = vs1.source.c_str();
-const char *fragmentShaderSource = fs1.source.c_str();
-const char *fragmentShaderSource2 = fs2.source.c_str();
+//struct shaderReader {
+//    shaderReader(std::string);
+//    std::string source;
+//};
+//
+//shaderReader::shaderReader(std::string name) {
+//    std::string line, allLines;
+//    std::ifstream theFile(name);
+//    if (theFile.is_open()) {
+//        while (std::getline(theFile, line)) {
+//            source = source + line + "\n";
+//        }
+//        std::cout << source;
+//        theFile.close();
+//    } else {
+//        std::cout << "Unable to open file " + name + "\n";
+//    }
+//}
+//
+//// load the shaders into shaderReaders
+//shaderReader vs1 = shaderReader("shaders/shader1.vert");
+//shaderReader fs1 = shaderReader("shaders/shader1.frag");
+//shaderReader fs2 = shaderReader("shaders/shader2.frag");
+//// get shaders from shaderReaders
+//const char *vertexShaderSource = vs1.source.c_str();
+//const char *fragmentShaderSource = fs1.source.c_str();
+//const char *fragmentShaderSource2 = fs2.source.c_str();
 
 int main()
 {
@@ -74,68 +76,8 @@ int main()
     
     
     // build and compile our shader program
-    // ------------------------------------
-    // vertex shader
-    int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    // check for shader compile errors
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    // fragment shader 1
-    int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    // check for shader compile errors
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    
-    // fragment shader 2
-    int fragmentShader2 = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader2, 1, &fragmentShaderSource2, NULL);
-    glCompileShader(fragmentShader2);
-    glGetShaderiv(fragmentShader2, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        glGetShaderInfoLog(fragmentShader2, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    
-    // link shader1
-    int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    // check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-    
-    // link shader2
-    int shaderProgram2 = glCreateProgram();
-    glAttachShader(shaderProgram2, vertexShader);
-    glAttachShader(shaderProgram2, fragmentShader2);
-    glLinkProgram(shaderProgram2);
-    glGetProgramiv(shaderProgram2, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram2, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-    glDeleteShader(fragmentShader2);
-    
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    Shader shader1("shaders/shader1.vert", "shaders/shader1.frag");
+    Shader shader2("shaders/shader1.vert", "shaders/shader2.frag");
     
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -192,13 +134,22 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
+        // time varying color (dynamic)
+//        glUseProgram(shaderProgram);
+        shader1.use();
+        float timeValue = glfwGetTime();
+        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+        int vertexColorLocation = glGetUniformLocation(shader1.ID, "ourColor");
+        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+        
         // draw our first triangle
-        glUseProgram(shaderProgram);
+//        glUseProgram(shaderProgram);
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         glDrawArrays(GL_TRIANGLES, 0, 3);
 //        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
         
-        glUseProgram(shaderProgram2);
+//        glUseProgram(shaderProgram2);
+        shader2.use();
         glBindVertexArray(VAO);
 //        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
         glDrawArrays(GL_TRIANGLES, 3, 3);
