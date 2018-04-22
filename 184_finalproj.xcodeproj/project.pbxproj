@@ -13,6 +13,7 @@
 		9845A14F2088185500505D92 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9845A14E2088185500505D92 /* CoreVideo.framework */; };
 		9845A1512088195A00505D92 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9845A1502088195A00505D92 /* libglfw3.a */; };
 		9845A1532088198700505D92 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9845A1522088198700505D92 /* IOKit.framework */; };
+		FEB49BD52088CDA4009D743B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = FEB49BD42088CDA4009D743B /* glad.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +36,8 @@
 		9845A14E2088185500505D92 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		9845A1502088195A00505D92 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = "../../../Downloads/glfw-3.2.1 2/src/libglfw3.a"; sourceTree = "<group>"; };
 		9845A1522088198700505D92 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		FEB49BD120881DC0009D743B /* glfw3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glfw3.h; sourceTree = "<group>"; };
+		FEB49BD42088CDA4009D743B /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glad.c; path = 184_finalproj/glad.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +59,7 @@
 		9845A136208817D500505D92 = {
 			isa = PBXGroup;
 			children = (
+				FEB49BD42088CDA4009D743B /* glad.c */,
 				9845A141208817D500505D92 /* 184_finalproj */,
 				9845A140208817D500505D92 /* Products */,
 				9845A1492088184600505D92 /* Frameworks */,
@@ -81,6 +85,7 @@
 		9845A1492088184600505D92 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FEB49BD120881DC0009D743B /* glfw3.h */,
 				9845A1522088198700505D92 /* IOKit.framework */,
 				9845A1502088195A00505D92 /* libglfw3.a */,
 				9845A14E2088185500505D92 /* CoreVideo.framework */,
@@ -147,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9845A143208817D500505D92 /* main.cpp in Sources */,
+				FEB49BD52088CDA4009D743B /* glad.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,7 +272,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				HEADER_SEARCH_PATHS = "/usr/local/include/**";
+				HEADER_SEARCH_PATHS = (
+					"/usr/local/include/**",
+					"./184_finalproj/include/**",
+				);
 				LIBRARY_SEARCH_PATHS = "/usr/local/lib/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -276,7 +285,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				HEADER_SEARCH_PATHS = "/usr/local/include/**";
+				HEADER_SEARCH_PATHS = (
+					"/usr/local/include/**",
+					"./184_finalproj/include/**",
+				);
 				LIBRARY_SEARCH_PATHS = "/usr/local/lib/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
