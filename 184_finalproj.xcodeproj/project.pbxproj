@@ -38,6 +38,9 @@
 		9845A1522088198700505D92 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		FEB49BD120881DC0009D743B /* glfw3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glfw3.h; sourceTree = "<group>"; };
 		FEB49BD42088CDA4009D743B /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glad.c; path = 184_finalproj/glad.c; sourceTree = "<group>"; };
+		FEFDC7AD208C6FC0006DA2C9 /* shader1.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader1.vert; sourceTree = "<group>"; };
+		FEFDC7AF208C7845006DA2C9 /* shader1.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader1.frag; sourceTree = "<group>"; };
+		FEFDC7B0208C79A8006DA2C9 /* shader2.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shader2.frag; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +80,7 @@
 		9845A141208817D500505D92 /* 184_finalproj */ = {
 			isa = PBXGroup;
 			children = (
+				FEFDC7AC208C6F91006DA2C9 /* shaders */,
 				9845A142208817D500505D92 /* main.cpp */,
 			);
 			path = 184_finalproj;
@@ -93,6 +97,16 @@
 				9845A14A2088184700505D92 /* OpenGL.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FEFDC7AC208C6F91006DA2C9 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				FEFDC7AD208C6FC0006DA2C9 /* shader1.vert */,
+				FEFDC7AF208C7845006DA2C9 /* shader1.frag */,
+				FEFDC7B0208C79A8006DA2C9 /* shader2.frag */,
+			);
+			path = shaders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
