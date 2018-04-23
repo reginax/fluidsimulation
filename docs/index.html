@@ -21,9 +21,14 @@
 </head>
 <h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2018</h1>
 <h2 align="middle">Final Project | Implementing 2D Grid-Based Fluid Dynamics Simulation</h2>
+<h3 align="middle"><a href="#proposal">Project Proposal</a> | <a href="#mid">Milestone Status Report</a></h3>
+
 <body>
 <br/>
-    <h2>Summary</h2>
+<section id="proposal">
+
+    <h2>Project Proposal</h2>
+    <h3>Summary</h3>
 
     <div class="padded">
         <p>Using the Navier-Stokes equations, we will be modeling an incompressible, homogeneous fluid in a 2D context. Using GLSL fragment shaders, we’re able to make these calculations in real-time using the GPU, allowing us to make an interactive demonstration of our fluid simulation.</p>
@@ -35,8 +40,8 @@
       <h3>Problem Description</h3>
       <p>In this project, we will be attempting to simulate fluid behavior in a 2D context using the Navier-Stokes equations. It’s an interesting problem because it focuses on fluid dynamics, which is something we’ve not worked with, instead having focused on very linear light rays and solid surfaces. Fluid simulations are commonly seen, and making it interactive shows that we’re able to perform the necessary calculations quickly and efficiently. We’re going to approach this problem by using the GLSL fragment shaders used in project 3-2 and making the physics calculations necessary inside the shaders in order to create an interactive model. </p>
 
-          <h2>Goals and Deliverables</h2>
-    <h3>Plan to deliver</h3>
+          <h3>Goals and Deliverables</h3>
+    <h3>I. Plan to deliver</h3>
     <ul>
       <li>Calculations for Navier-Stokes equations in plain C++</li>
       <li>GLSL calculations for the Navier-Stokes equations</li>
@@ -50,46 +55,81 @@
       <li>Questions to answer: how to perform fast, possibly complex calculations</li>
     </ul>
 
-        <h3>Hope to deliver</h3>
+        <h3>II. Hope to deliver</h3>
         <ul>
           <li>Multiple bodies of fluids at the same time</li>
           <li>Implement compressibility, different conditions, and more</li>
           <li>Possibly put an object in the scene with the fluid and have the fluid react around it</li>
         </ul>
 
-      <h2>Schedule</h2>
-          <h3>Week 1: April 1 - April 7</h3>
+      <h3>Schedule</h3>
+          <p>Week 1: April 1 - April 7</p>
           <ul>
             <li>Research Navier-Stokes equations and pseudocode them</li>
             <li>Become more familiar with GLSL shaders from project 3-2</li>
             <li>Await proposal feedback</li>
           </ul>
-          <h3>Week 2: April 8 - April 14</h3>
+          <p>Week 2: April 8 - April 14</p>
           <ul>
             <li>First iteration of code for shaders and debug</li>
             <li>Work on getting non-interactive fluid simulation working</li>
           </ul>
-          <h3>Week 3: April 15 - April 21</h3>
+          <p>Week 3: April 15 - April 21</p>
           <ul>
             <li>Second iteration of code for shaders and debug/refactoring</li>
             <li>Work on getting interactive fluid simulation working</li>
           </ul>
-          <h3>Week 4: April 22 - April 28 (Milestone week!)</h3>
+          <p>Week 4: April 22 - April 28 (Milestone week!)</p>
           <ul>
             <li>Turn in milestone paper & catch up on any work left behind</li>
             <li>If ahead of schedule, work on placing objects/adjusting compressibility</li>
           </ul>
-          <h3>Week 5: April 29 - May 4 (Presentations + Final deliverables)</h3>
+          <p>Week 5: April 29 - May 4 (Presentations + Final deliverables)</p>
           <ul>
             <li>Work on final project presentation and final deliverables</li>
           </ul>
-      <h2>Resources</h2>
+      <h3>Resources</h3>
       <ul>
         <li>GLSL and openGL basic information given by staff</li>
         <li>Navier-Stokes equations from Wikipedia and other online resources</li>
         <li>Platform: Macbook Pro, iOS, mostly using openGL and GLSL fragment shaders</li>
       </ul>
     </p>
+  </section>
+  <section id="mid">
+
+        <h2>Milestone Status Report</h2>
+    <h3>What we’ve have accomplished</h3>
+    <p>The main accomplishments of this milestone are setting up our OpenGL project with XCode and using the GLFW and GLAD libraries, and understanding as well as understanding and implementing parts of the graphics pipeline down through the Shaders and Textures tutorial (<a href=“https://learnopengl.com/Getting-started/Textures” target=“_blank”>reference</a>. After being able to render triangles per the tutorial, we wrote various vertex and fragment shaders, the last few of which have modified position parameters using uniforms to pass through values that vary as a function of time. </p>
+
+    <p>In addition to the rendering pipeline, we also have planned out our next steps in the process, which consist of creating the two-texture structures that hold information about velocity, density, and pressure, that allow us to use the Render-To-Texture method to make calculations as well as read out from the texture (by having the results from the frame buffer be input into the texture, and then ping-ponging between the two). We then will create functions that do advection (the carrying of the fluid and other components by its velocity), calculate buoyancy and other outside forces, compute the divergence, and then apply Jacobi iteration to converge to a pressure field, which we can use to calculate a divergence-free velocity field (which we need to have to make sure the same amount of fluid flows in as out) and finally the updated velocity texture. As a reference, we’re using the Mark Harris paper (Fast Fluid Dynamics Simulation on the GPU) found <a href=“http://developer.download.nvidia.com/books/HTML/gpugems/gpugems_ch38.html” target=“_blank”>here</a>.</p>
+
+    <h3>Preliminary result</h3>
+    <p> Currently, we are able to use our openGL code in order to render 100,000 particles on a viewing screen, and by using uniforms, we have time variations that we are able to utilize in both our fragment shader as well as our vertex shader for the project. More specifically, our current display has particles varying in the y-direction as a function of time as well as varying the particle’s color as a function of time. The end result displays a red wave undulating from the bottom of the screen to the top of the screen, pulsing red. This shows that we’re able to control the color and position over time, and we’re able to pass in information from our main C++ code into our vertex and fragment shaders, which may prove critical in the rendering of our particles via the Navier-Stokes equations.</p>
+
+    <h3>Progress relative to our plan</h3>
+
+    <p>We were behind schedule initially as we didn’t anticipate it taking that long to find the right resources to set up the OpenGL framework. Some of our initial trouble was with following a tutorial to use OpenGL with Visual Studio but realizing there was no direct support for C++ on the MacOS versions. Then we pivoted to using XCode, where it was a matter of adding the right files and build settings to create an application window. We encountered many bugs in this (having not been very used to using XCode, and the importing and linking of libraries and other resources being a lot of research online). Thus, our first two weeks were not on schedule relative to our plan, as we had hoped to start a basic framework per the <a href=“https://learnopengl.com/Getting-started/Hello-Triangle” target=“_blank”>Learn OpenGL</a> tutorial by week 1.
+
+    <p>Our modified schedule moving forward (with rolled over tasks in <b>bold</b> and more detailed step breakdown <i>italicized</i>) is:
+
+    <p>Week 4: April 22 - April 28 (Milestone week!)</p>
+    <ul>
+         <li>Turn in milestone paper</li>
+         <li><b>Work on getting non-interactive fluid simulation working</b></li>
+         <li><i>Figure out how to pass textures into the renderer to show on screen</i></li>
+         <li><i>Figure out how to save information into a texture</i></li>
+         <li><i>Figure out what to do with particles that have faded from sight (i.e. dead)</i></li>
+         <li><b>Second iteration of code for shaders and debug/refactoring</b></li>
+         <li><s>If ahead of schedule, work on placing objects/adjusting compressibility</s></li>
+    </ul>
+    <p>Week 5: April 29 - May 4 (Presentations + Final deliverables)</p>
+    <ul>
+            <li><s>Work on placing objects/adjusting compressibility</s></li>
+            <li>Work on final project presentation and final deliverables</li>
+    </ul>
+    </p>
+  </section>
 </div>
 </body>
 </html>
