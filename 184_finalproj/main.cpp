@@ -48,6 +48,7 @@ int main()
     Shader visualizer("shaders/vertex.vert", "shaders/visualize.frag");
     Shader shader3("shaders/shader3.vert", "shaders/shader1.frag");
     Shader shader1("shaders/vertex.vert", "shaders/shader1.frag");
+    Shader tester("shaders/tester.vert", "shaders/tester.frag");
     
     QuadVAO = createQuad();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -72,6 +73,56 @@ int main()
         
         // update information
         glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+//        advection(Velocity.A, Velocity.A, Velocity.B, VelocityDissipation);
+//        swapLayers(&Velocity);
+//        advection(Velocity.A, Temperature.A, Temperature.B, TemperatureDissipation);
+//        swapLayers(&Temperature);
+//        advection(Velocity.A, Density.A, Density.B, DensityDissipation);
+//        swapLayers(&Density);
+//        applyBuoyancy(Velocity.A, Temperature.A, Density.A, Velocity.B);
+//        swapLayers(&Velocity);
+//        applyImpulse(Temperature.A, ImpulsePosition, ImpulseTemp);
+//        applyImpulse(Density.A, ImpulsePosition, ImpulseDensity);
+//        computeDivergence(Velocity.A, Divergence);
+//        resetLayer(Pressure.A, 0);
+//        for (int i = 0; i < 40; ++i) {
+//            jacobi(Pressure.A, Divergence, Pressure.B);
+//            swapLayers(&Pressure);
+//        }
+//        subtractGradient(Velocity.A, Pressure.A, Velocity.B);
+//        swapLayers(&Velocity);
+
+        // rendering
+        
+        // *** NEW ***
+        visualizer.use();
+        // *** NEW ***
+        
+        // *** OLD ***
+//        shader1.use();
+//        float timeValue = glfwGetTime();
+//        float timeCount = timeValue;
+//        int vertexLocation = glGetUniformLocation(shader1.ID, "time");
+//        glUniform1f(vertexLocation, timeCount);
+        // *** OLD ***
+        
+        processInput(window);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        
+        // *** OLD ***
+//        GLint fillColor = glGetUniformLocation(shader1.ID, "fillColor");
+        // *** OLD ***
+        
+        // *** NEW ***
+        GLint fillColor = glGetUniformLocation(visualizer.ID, "fillColor");
+        GLint scale = glGetUniformLocation(visualizer.ID, "scale");
+        // *** NEW ***
+        glEnable(GL_BLEND);
+
+        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glBindVertexArray(QuadVAO);
+        
         advection(Velocity.A, Velocity.A, Velocity.B, VelocityDissipation);
         swapLayers(&Velocity);
         advection(Velocity.A, Temperature.A, Temperature.B, TemperatureDissipation);
@@ -91,40 +142,7 @@ int main()
         subtractGradient(Velocity.A, Pressure.A, Velocity.B);
         swapLayers(&Velocity);
 
-        // rendering
-        
-        // *** NEW ***
-        visualizer.use();
-        // *** NEW ***
-        
-        // *** OLD ***
-//        shader1.use();
-//        float timeValue = glfwGetTime();
-//        float timeCount = timeValue;
-//        int vertexLocation = glGetUniformLocation(shader1.ID, "time");
-//        glUniform1f(vertexLocation, timeCount);
-        // *** OLD ***
-        
-        processInput(window);
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-        
-        // *** OLD ***
-//        GLint fillColor = glGetUniformLocation(shader1.ID, "fillColor");
-        // *** OLD ***
-        
-        // *** NEW ***
-        GLint fillColor = glGetUniformLocation(visualizer.ID, "fillColor");
-        GLint scale = glGetUniformLocation(visualizer.ID, "scale");
-        // *** NEW ***
-        glEnable(GL_BLEND);
-
-        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glBindVertexArray(QuadVAO);
-
-        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, Density.A.textureHandle);
-        glUniform1i(glGetUniformLocation(visualizer.ID, "Sampler"), 0);
         glUniform3f(fillColor, 0.8f, 0.2f, 0.4f);
         
         // *** NEW ***

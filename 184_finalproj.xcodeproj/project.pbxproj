@@ -60,6 +60,8 @@
 		FEFDC7C32096A72C006DA2C9 /* applyImpulse.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = applyImpulse.frag; sourceTree = "<group>"; };
 		FEFDC7C42096A739006DA2C9 /* applyBuoyancy.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = applyBuoyancy.frag; sourceTree = "<group>"; };
 		FEFDC7C52096B274006DA2C9 /* visualize.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = visualize.frag; sourceTree = "<group>"; };
+		FEFDC7C620981DBC006DA2C9 /* tester.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = tester.vert; sourceTree = "<group>"; };
+		FEFDC7C720981DF9006DA2C9 /* tester.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = tester.frag; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,8 @@
 				FEFDC7C32096A72C006DA2C9 /* applyImpulse.frag */,
 				FEFDC7C42096A739006DA2C9 /* applyBuoyancy.frag */,
 				FEFDC7C52096B274006DA2C9 /* visualize.frag */,
+				FEFDC7C620981DBC006DA2C9 /* tester.vert */,
+				FEFDC7C720981DF9006DA2C9 /* tester.frag */,
 			);
 			path = shaders;
 			sourceTree = "<group>";
