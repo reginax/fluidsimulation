@@ -1,4 +1,5 @@
 #include "main.h"
+//#include "vector2D.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
@@ -160,5 +161,18 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     // mods check if Shift, Control, Alt, or SUper keys were held down
     // ref: http://www.glfw.org/docs/latest/group__mods.html
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
         std::cout << "mouse clicked!" << std::endl;
+        
+        // UNCOMMENT THE LINES BELOW TO DROP INTERACTIVE RED DOTS
+        
+//        // get cursor position
+//        double xpos, ypos;
+//        glfwGetCursorPos(window, &xpos, &ypos);
+//        Vector2D CursorPosition = Vector2D_{(int)xpos, (int)ypos};
+//        applyImpulse(Temperature.A, CursorPosition, ImpulseTemp);
+//        applyImpulse(Density.A, CursorPosition, ImpulseDensity);
+//
+        // UNCOMMENT THE LINES ABOVE TO DROP INTERACTIVE RED DOTS
+    }
 }
