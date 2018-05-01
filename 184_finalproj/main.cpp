@@ -36,6 +36,15 @@ int main()
         return -1;
     }
     
+    // glfw cursor creation
+    GLFWcursor* cursor = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+    if (cursor == NULL)
+    {
+        std::cout << "Failed to create GLFW standard cursor" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+    
     Velocity = createTwoLayer(SCR_WIDTH, SCR_HEIGHT, 2);
     Density = createTwoLayer(SCR_WIDTH, SCR_HEIGHT, 1);
     Pressure = createTwoLayer(SCR_WIDTH, SCR_HEIGHT, 1);
@@ -157,7 +166,7 @@ int main()
     }
 
     glDeleteVertexArrays(1, &QuadVAO);
-    glfwTerminate();
+    glfwTerminate(); // also destroys all cursors remaining
     return 0;
 }
 
