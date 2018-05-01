@@ -12,6 +12,8 @@ static TwoLayer Velocity, Density, Pressure, Temperature;
 static Layer Divergence, TestLayer;
 static GLuint QuadVAO;
 
+bool pressed;
+
 int main()
 {
     // glfw: initialize and configure
@@ -158,7 +160,8 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
     std::cout << "cursor moved:   " << xpos << " | " << ypos << std::endl;
     int state = glfwGetKey(window, GLFW_MOUSE_BUTTON_LEFT);
-    if (state == GLFW_PRESS) {
+//    if (state == GLFW_PRESS) {
+    if (pressed) {
         Vector2D CursorPosition = Vector2D_{(int)(xpos * 2.0), (int)SCR_HEIGHT - (int)(ypos * 2) + 100};
         applyImpulse(Temperature.A, CursorPosition, ImpulseTemp, DrawRadius/2.0);
         applyImpulse(Density.A, CursorPosition, ImpulseDensity, DrawRadius/2.0);
@@ -169,24 +172,28 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
     // mods check if Shift, Control, Alt, or SUper keys were held down
     // ref: http://www.glfw.org/docs/latest/group__mods.html
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-    {
-        std::cout << "mouse clicked!" << std::endl;
-        
-        // UNCOMMENT THE LINES BELOW TO DROP INTERACTIVE RED DOTS
-        
-        // get cursor position
-        double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos);
-        std::cout << xpos << std::endl;
-        std::cout << ypos << std::endl;
-        // for retina screens
-        Vector2D CursorPosition = Vector2D_{(int)(xpos * 2.0), (int)SCR_HEIGHT - (int)(ypos * 2) + 100};
-        // for non-retina screens
-//        Vector2D CursorPosition = Vector2D_{(int)(xpos), (int)(SCR_HEIGHT) - (int)(ypos)};
-        applyImpulse(Temperature.A, CursorPosition, ImpulseTemp, DrawRadius/2.0);
-        applyImpulse(Density.A, CursorPosition, ImpulseDensity, DrawRadius/2.0);
-//
-        // UNCOMMENT THE LINES ABOVE TO DROP INTERACTIVE RED DOTS
+    if (button == GLFW_MOUSE_BUTTON_LEFT) {
+        if (action == GLFW_PRESS) {
+            pressed = true;
+            std::cout << "mouse clicked!" << std::endl;
+            
+            // UNCOMMENT THE LINES BELOW TO DROP INTERACTIVE RED DOTS
+            
+            // get cursor position
+            double xpos, ypos;
+            glfwGetCursorPos(window, &xpos, &ypos);
+            std::cout << xpos << std::endl;
+            std::cout << ypos << std::endl;
+            // for retina screens
+            Vector2D CursorPosition = Vector2D_{(int)(xpos * 2.0), (int)SCR_HEIGHT - (int)(ypos * 2) + 100};
+            // for non-retina screens
+    //        Vector2D CursorPosition = Vector2D_{(int)(xpos), (int)(SCR_HEIGHT) - (int)(ypos)};
+            applyImpulse(Temperature.A, CursorPosition, ImpulseTemp, DrawRadius/2.0);
+            applyImpulse(Density.A, CursorPosition, ImpulseDensity, DrawRadius/2.0);
+    //
+            // UNCOMMENT THE LINES ABOVE TO DROP INTERACTIVE RED DOTS
+        } else {
+            pressed = false;
+        }
     }
 }
