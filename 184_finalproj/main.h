@@ -52,7 +52,7 @@ void advection(Layer velocity, Layer src, Layer dest, float dissipation);
 void jacobi(Layer pressure, Layer divergence, Layer dest);
 void subtractGradient(Layer velocity, Layer pressure, Layer dest);
 void computeDivergence(Layer velocity, Layer dest);
-void applyImpulse(Layer dest, Vector2D position, float value);
+void applyImpulse(Layer dest, Vector2D position, float value, float radius);
 void applyBuoyancy(Layer velocity, Layer temperature, Layer density, Layer dest);
 
 

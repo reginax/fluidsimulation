@@ -147,7 +147,7 @@ void computeDivergence(Layer velocity, Layer dest) {
     resetState();
 }
 
-void applyImpulse(Layer dest, Vector2D position, float value) {
+void applyImpulse(Layer dest, Vector2D position, float value, float radius) {
     GLuint prog = Programs.ApplyImpulse;
     glUseProgram(prog);
     
@@ -156,7 +156,7 @@ void applyImpulse(Layer dest, Vector2D position, float value) {
     GLint fillColorLoc = glGetUniformLocation(prog, "fillColor");
     
     glUniform2f(pointLoc, (float) position.x, (float) position.y);
-    glUniform1f(radLoc, DrawRadius);
+    glUniform1f(radLoc, radius);
     glUniform3f(fillColorLoc, value, value, value);
     
     glBindFramebuffer(GL_FRAMEBUFFER, dest.frameBufferHandle);

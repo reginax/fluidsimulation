@@ -40,7 +40,7 @@ int main()
         return -1;
     }
 
-    static int width, height;
+    int width, height;
     glfwGetFramebufferSize(window, &width, &height);
 
     // glfw cursor creation
@@ -114,8 +114,8 @@ int main()
         applyBuoyancy(Velocity.A, Temperature.A, Density.A, Velocity.B);
         swapLayers(&Velocity);
         if (first) {
-            applyImpulse(Temperature.A, ImpulsePosition, ImpulseTemp);
-            applyImpulse(Density.A, ImpulsePosition, ImpulseDensity);
+            applyImpulse(Temperature.A, ImpulsePosition, ImpulseTemp, DrawRadius);
+            applyImpulse(Density.A, ImpulsePosition, ImpulseDensity, DrawRadius);
 //            first = false;
         }
         computeDivergence(Velocity.A, Divergence);
@@ -178,8 +178,8 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         std::cout << xpos << std::endl;
         std::cout << ypos << std::endl;
         Vector2D CursorPosition = Vector2D_{(int)xpos, (int)(SCR_HEIGHT/2) - (int)ypos};
-        applyImpulse(Temperature.A, CursorPosition, ImpulseTemp);
-        applyImpulse(Density.A, CursorPosition, ImpulseDensity);
+        applyImpulse(Temperature.A, CursorPosition, ImpulseTemp, DrawRadius/4.0);
+        applyImpulse(Density.A, CursorPosition, ImpulseDensity, DrawRadius/4.0);
 //
         // UNCOMMENT THE LINES ABOVE TO DROP INTERACTIVE RED DOTS
     }
