@@ -1,6 +1,8 @@
 #include "main.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void processInput(GLFWwindow *window);
 
 // settings
@@ -48,6 +50,10 @@ int main()
         glfwTerminate();
         return -1;
     }
+    
+    // glfw cursor + mouse callback functions
+    glfwSetCursorPosCallback(window, cursor_position_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
     
     Velocity = createTwoLayer(SCR_WIDTH, SCR_HEIGHT, 2);
     Density = createTwoLayer(SCR_WIDTH, SCR_HEIGHT, 1);
@@ -142,4 +148,17 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+}
+
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+//    std::cout << "cursor moved:   " << xpos << " | " << ypos << std::endl;
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    // mods check if Shift, Control, Alt, or SUper keys were held down
+    // ref: http://www.glfw.org/docs/latest/group__mods.html
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+        std::cout << "mouse clicked!" << std::endl;
 }
