@@ -34,12 +34,12 @@ static const float GradientScale = 1.125f / DX;
 static const float NormalTemp = 0.0f;
 static const float ImpulseTemp = 10.0f;
 static const float ImpulseDensity = 1.0f;
-static const float SmokeBuoyancy = 0.8f;
+static const float SmokeBuoyancy = 1.0f;
 static const float SmokeWeight = 0.05f;
 static const float VelocityDissipation = 0.99f;
 static const float DensityDissipation = 0.9999f;
 static const float TemperatureDissipation = 0.99f;
-static const Vector2D ImpulsePosition = { SCR_WIDTH / 2, - (int) DrawRadius / 2 };
+static const Vector2D ImpulsePosition = { SCR_WIDTH / 2, SCR_HEIGHT / 8 };
 
 Layer createLayer(GLsizei width, GLsizei height, int numComponents);
 TwoLayer createTwoLayer(GLsizei width, GLsizei height, int numComponents);

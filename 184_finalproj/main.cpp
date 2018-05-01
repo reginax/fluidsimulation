@@ -81,6 +81,8 @@ int main()
     resetLayer(Temperature.A, 0.0f);
     resetLayer(Temperature.B, 0.0f);
     
+    bool first = true;
+    
     // main render loop
     while(!glfwWindowShouldClose(window)) {
         glfwGetFramebufferSize(window, &width, &height);
@@ -111,8 +113,11 @@ int main()
         swapLayers(&Density);
         applyBuoyancy(Velocity.A, Temperature.A, Density.A, Velocity.B);
         swapLayers(&Velocity);
-        applyImpulse(Temperature.A, ImpulsePosition, ImpulseTemp);
-        applyImpulse(Density.A, ImpulsePosition, ImpulseDensity);
+        if (first) {
+            applyImpulse(Temperature.A, ImpulsePosition, ImpulseTemp);
+            applyImpulse(Density.A, ImpulsePosition, ImpulseDensity);
+            first = false;
+        }
         computeDivergence(Velocity.A, Divergence);
         resetLayer(Pressure.A, 0.0f);
         resetLayer(Pressure.B, 0.0f);
@@ -167,12 +172,14 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         
         // UNCOMMENT THE LINES BELOW TO DROP INTERACTIVE RED DOTS
         
-//        // get cursor position
-//        double xpos, ypos;
-//        glfwGetCursorPos(window, &xpos, &ypos);
-//        Vector2D CursorPosition = Vector2D_{(int)xpos, (int)ypos};
-//        applyImpulse(Temperature.A, CursorPosition, ImpulseTemp);
-//        applyImpulse(Density.A, CursorPosition, ImpulseDensity);
+        // get cursor position
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        std::cout << xpos << std::endl;
+        std::cout << ypos << std::endl;
+        Vector2D CursorPosition = Vector2D_{(int)xpos, (int)ypos};
+        applyImpulse(Temperature.A, CursorPosition, ImpulseTemp);
+        applyImpulse(Density.A, CursorPosition, ImpulseDensity);
 //
         // UNCOMMENT THE LINES ABOVE TO DROP INTERACTIVE RED DOTS
     }
