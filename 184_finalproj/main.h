@@ -27,7 +27,7 @@ typedef struct Vector2D_ {
 
 // settings
 static const int pos = 0;
-static const unsigned int SCR_WIDTH = 1200;
+static const unsigned int SCR_WIDTH = 800;
 static const unsigned int SCR_HEIGHT = 1600;
 static const float TimeStep = 0.125f;
 static const float GradientScale = 1.125f / DX;

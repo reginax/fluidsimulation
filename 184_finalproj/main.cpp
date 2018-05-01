@@ -116,7 +116,7 @@ int main()
         if (first) {
             applyImpulse(Temperature.A, ImpulsePosition, ImpulseTemp);
             applyImpulse(Density.A, ImpulsePosition, ImpulseDensity);
-            first = false;
+//            first = false;
         }
         computeDivergence(Velocity.A, Divergence);
         resetLayer(Pressure.A, 0.0f);
@@ -177,7 +177,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         glfwGetCursorPos(window, &xpos, &ypos);
         std::cout << xpos << std::endl;
         std::cout << ypos << std::endl;
-        Vector2D CursorPosition = Vector2D_{(int)xpos, (int)ypos};
+        Vector2D CursorPosition = Vector2D_{(int)xpos, (int)(SCR_HEIGHT/2) - (int)ypos};
         applyImpulse(Temperature.A, CursorPosition, ImpulseTemp);
         applyImpulse(Density.A, CursorPosition, ImpulseDensity);
 //

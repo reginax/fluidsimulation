@@ -14,8 +14,6 @@
 		9845A1512088195A00505D92 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9845A1502088195A00505D92 /* libglfw3.a */; };
 		9845A1532088198700505D92 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9845A1522088198700505D92 /* IOKit.framework */; };
 		FEB49BD52088CDA4009D743B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = FEB49BD42088CDA4009D743B /* glad.c */; };
-		FEFDC7B82094F941006DA2C9 /* createLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FEFDC7B72094F941006DA2C9 /* createLayer.cpp */; };
-		FEFDC7BA2094FD2A006DA2C9 /* createQuad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FEFDC7B92094FD2A006DA2C9 /* createQuad.cpp */; };
 		FEFDC7BC20950025006DA2C9 /* otherOperations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FEFDC7BB20950025006DA2C9 /* otherOperations.cpp */; };
 /* End PBXBuildFile section */
 
@@ -49,8 +47,6 @@
 		FEFDC7B4208D8869006DA2C9 /* particle_shader.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = particle_shader.vert; sourceTree = "<group>"; };
 		FEFDC7B5208D88DB006DA2C9 /* particle_shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = particle_shader.frag; sourceTree = "<group>"; };
 		FEFDC7B6208D9194006DA2C9 /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
-		FEFDC7B72094F941006DA2C9 /* createLayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = createLayer.cpp; sourceTree = "<group>"; };
-		FEFDC7B92094FD2A006DA2C9 /* createQuad.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = createQuad.cpp; sourceTree = "<group>"; };
 		FEFDC7BB20950025006DA2C9 /* otherOperations.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = otherOperations.cpp; sourceTree = "<group>"; };
 		FEFDC7BE2096A4EE006DA2C9 /* vertex.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = vertex.vert; sourceTree = "<group>"; };
 		FEFDC7BF2096A535006DA2C9 /* advection.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = advection.frag; sourceTree = "<group>"; };
@@ -105,8 +101,6 @@
 				9845A142208817D500505D92 /* main.cpp */,
 				FEFDC7B2208C815D006DA2C9 /* shader.h */,
 				FEFDC7B6208D9194006DA2C9 /* main.h */,
-				FEFDC7B72094F941006DA2C9 /* createLayer.cpp */,
-				FEFDC7B92094FD2A006DA2C9 /* createQuad.cpp */,
 				FEFDC7BB20950025006DA2C9 /* otherOperations.cpp */,
 			);
 			path = 184_finalproj;
@@ -206,8 +200,6 @@
 			files = (
 				9845A143208817D500505D92 /* main.cpp in Sources */,
 				FEB49BD52088CDA4009D743B /* glad.c in Sources */,
-				FEFDC7BA2094FD2A006DA2C9 /* createQuad.cpp in Sources */,
-				FEFDC7B82094F941006DA2C9 /* createLayer.cpp in Sources */,
 				FEFDC7BC20950025006DA2C9 /* otherOperations.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
