@@ -68,6 +68,8 @@ int main()
     // main render loop
     while(!glfwWindowShouldClose(window)) {
         glViewport(0, 0, width, height);
+        glfwGetFramebufferSize(window, &width, &height);
+
         // rendering
         visualizer.use();
         
