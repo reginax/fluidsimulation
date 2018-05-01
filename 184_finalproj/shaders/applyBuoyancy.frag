@@ -8,8 +8,8 @@ uniform sampler2D Density;
 
 uniform float NormalTemp;
 uniform float TimeStep;
-uniform float Sigma;
-uniform float Kappa;
+uniform float Buoyancy;
+uniform float Weight;
 
 void main() {
     ivec2 X = ivec2(gl_FragCoord.xy);
@@ -19,6 +19,6 @@ void main() {
     
     if (temp > NormalTemp) {
         float density = texelFetch(Density, X, 0).x;
-        FragColor += (TimeStep * (temp - NormalTemp) * Sigma - density * Kappa) * vec2(0, 1);
+        FragColor += (TimeStep * (temp - NormalTemp) * Buoyancy - density * Weight) * vec2(0, 1);
     }
 }

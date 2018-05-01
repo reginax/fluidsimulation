@@ -57,8 +57,10 @@ void advection(Layer velocity, Layer src, Layer dest, float dissipation) {
     glUniform1i(source, 1);
     
     glBindFramebuffer(GL_FRAMEBUFFER, dest.frameBufferHandle);
+    
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, velocity.textureHandle);
+    
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, src.textureHandle);
     
@@ -83,8 +85,10 @@ void jacobi(Layer pressure, Layer divergence, Layer dest) {
     glUniform1i(divLoc, 1);
     
     glBindFramebuffer(GL_FRAMEBUFFER, dest.frameBufferHandle);
+    
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, pressure.textureHandle);
+    
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, divergence.textureHandle);
     
@@ -109,8 +113,10 @@ void subtractGradient(Layer velocity, Layer pressure, Layer dest) {
     glUniform1f(inverseDX2, 0.5f / DX);
     
     glBindFramebuffer(GL_FRAMEBUFFER, dest.frameBufferHandle);
+    
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, velocity.textureHandle);
+    
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, pressure.textureHandle);
     
@@ -130,6 +136,7 @@ void computeDivergence(Layer velocity, Layer dest) {
     glUniform1f(inverseDX2, 0.5f / DX);
     
     glBindFramebuffer(GL_FRAMEBUFFER, dest.frameBufferHandle);
+    
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, velocity.textureHandle);
     
@@ -167,23 +174,30 @@ void applyBuoyancy(Layer velocity, Layer temperature, Layer density, Layer dest)
     GLint densLoc = glGetUniformLocation(prog, "Density");
     GLint normalTemp = glGetUniformLocation(prog, "NormalTemp");
     GLint timeStep = glGetUniformLocation(prog, "TimeStep");
-    GLint sigma = glGetUniformLocation(prog, "Sigma");
-    GLint kappa = glGetUniformLocation(prog, "Kappa");
+    GLint buoyancy = glGetUniformLocation(prog, "Buoyancy");
+    GLint weight = glGetUniformLocation(prog, "Weight");
     
     glUniform1i(tempLoc, 1);
     glUniform1i(densLoc, 2);
     glUniform1f(normalTemp, NormalTemp);
     glUniform1f(timeStep, TimeStep);
-    glUniform1f(sigma, SmokeBuoyancy);
-    glUniform1f(kappa, SmokeWeight);
+    glUniform1f(buoyancy, SmokeBuoyancy);
+    glUniform1f(weight, SmokeWeight);
     
     glBindFramebuffer(GL_FRAMEBUFFER, dest.frameBufferHandle);
+    
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, velocity.textureHandle);
+    
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, temperature.textureHandle);
+    
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, density.textureHandle);
+    
+    glUniform1i(glGetUniformLocation(prog, "Velocity"), 0);
+    glUniform1i(glGetUniformLocation(prog, "Temperature"), 1);
+    glUniform1i(glGetUniformLocation(prog, "Density"), 2);
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     

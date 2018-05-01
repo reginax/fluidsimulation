@@ -46,7 +46,6 @@ TwoLayer createTwoLayer(GLsizei width, GLsizei height, int numComponents);
 GLuint createQuad();
 void resetLayer(Layer layer, float val);
 void createPrograms();
-
 void swapLayers(TwoLayer* twolayer);
 void resetState();
 void advection(Layer velocity, Layer src, Layer dest, float dissipation);
