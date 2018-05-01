@@ -72,7 +72,9 @@ int main()
 //        glfwPollEvents();
         
         // update information
-        glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        glViewport(0, 0, width, height);
 //        advection(Velocity.A, Velocity.A, Velocity.B, VelocityDissipation);
 //        swapLayers(&Velocity);
 //        advection(Velocity.A, Temperature.A, Temperature.B, TemperatureDissipation);
