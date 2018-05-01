@@ -41,54 +41,17 @@ int main()
     Pressure = createTwoLayer(SCR_WIDTH, SCR_HEIGHT, 1);
     Temperature = createTwoLayer(SCR_WIDTH, SCR_HEIGHT, 1);
     Divergence = createLayer(SCR_WIDTH, SCR_HEIGHT, 3);
-    TestLayer = createLayer(SCR_WIDTH, SCR_HEIGHT, 1);
     
     createPrograms();
-    Shader visualizer("shaders/vertex.vert", "shaders/visualize.frag");
     
     // build and compile our various shader programs
+    Shader visualizer("shaders/vertex.vert", "shaders/visualize.frag");
     Shader shader3("shaders/shader3.vert", "shaders/shader1.frag");
     Shader shader1("shaders/vertex.vert", "shaders/shader1.frag");
     
     QuadVAO = createQuad();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//    resetLayer(Temperature.A, 0.0f);
-    
-    // ******OLD********
-//    // set up vertex data (and buffer(s)) and configure vertex attributes
-//    float dots[300000];
-//    for (int i = 0; i < 1000; ++i) {
-//        float xposition = i * 2.0f / 500 - 1.0f;
-//        for (int j = 0; j < 100; ++j) {
-//            float yposition = j * 2.0f / 500 - 0.1f;
-//            dots[3*(100 * i + j)] = xposition;
-//            dots[3*(100 * i + j) + 1] = yposition;
-//            dots[3*(100 * i + j) + 2] = 0.0f;
-//        }
-//    }
-//
-//    unsigned int VBO, VAO;
-//    glGenVertexArrays(1, &VAO);
-//    glGenBuffers(1, &VBO);
-//    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-//    glBindVertexArray(VAO);
-//
-//    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(dots), dots, GL_STATIC_DRAW);
-//
-//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-//    glEnableVertexAttribArray(0);
-//
-//    // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-//    glBindBuffer(GL_ARRAY_BUFFER, 0);
-//
-//    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-//    // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-//    glBindVertexArray(0);
-//
-////    wireframe mode
-////    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    // ******OLD********
+    resetLayer(Temperature.A, 0.0f);
     
     // main render loop
     while(!glfwWindowShouldClose(window)) {
@@ -118,7 +81,7 @@ int main()
         applyBuoyancy(Velocity.A, Temperature.A, Density.A, Velocity.B);
         swapLayers(&Velocity);
         applyImpulse(Temperature.A, ImpulsePosition, ImpulseTemp);
-        swapLayers(&Velocity);
+        applyImpulse(Density.A, ImpulsePosition, ImpulseDensity);
         computeDivergence(Velocity.A, Divergence);
         resetLayer(Pressure.A, 0);
         for (int i = 0; i < 40; ++i) {
@@ -129,6 +92,7 @@ int main()
         swapLayers(&Velocity);
 
         // rendering
+        
         // *** NEW ***
         visualizer.use();
         // *** NEW ***
@@ -158,7 +122,9 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
         glBindVertexArray(QuadVAO);
 
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, Density.A.textureHandle);
+        glUniform1i(glGetUniformLocation(visualizer.ID, "Sampler"), 0);
         glUniform3f(fillColor, 0.8f, 0.2f, 0.4f);
         
         // *** NEW ***
@@ -171,11 +137,6 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-    
-    // ******OLD********
-//    glDeleteVertexArrays(1, &VAO);
-//    glDeleteBuffers(1, &VBO);
-    // ******OLD********
 
     glDeleteVertexArrays(1, &QuadVAO);
     glfwTerminate();

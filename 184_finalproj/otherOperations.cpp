@@ -61,6 +61,10 @@ void advection(Layer velocity, Layer src, Layer dest, float dissipation) {
     glBindTexture(GL_TEXTURE_2D, velocity.textureHandle);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, src.textureHandle);
+    
+    glUniform1i(glGetUniformLocation(prog, "Velocity"), 0);
+    glUniform1i(glGetUniformLocation(prog, "Source"), 1);
+    
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     resetState();
@@ -83,6 +87,10 @@ void jacobi(Layer pressure, Layer divergence, Layer dest) {
     glBindTexture(GL_TEXTURE_2D, pressure.textureHandle);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, divergence.textureHandle);
+    
+    glUniform1i(glGetUniformLocation(prog, "Pressure"), 0);
+    glUniform1i(glGetUniformLocation(prog, "Divergence"), 1);
+    
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     resetState();
@@ -105,6 +113,10 @@ void subtractGradient(Layer velocity, Layer pressure, Layer dest) {
     glBindTexture(GL_TEXTURE_2D, velocity.textureHandle);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, pressure.textureHandle);
+    
+    glUniform1i(glGetUniformLocation(prog, "Velocity"), 0);
+    glUniform1i(glGetUniformLocation(prog, "Pressure"), 1);
+    
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     resetState();
@@ -120,6 +132,9 @@ void computeDivergence(Layer velocity, Layer dest) {
     glBindFramebuffer(GL_FRAMEBUFFER, dest.frameBufferHandle);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, velocity.textureHandle);
+    
+    glUniform1i(glGetUniformLocation(prog, "Velocity"), 0);
+    
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     resetState();
@@ -169,6 +184,7 @@ void applyBuoyancy(Layer velocity, Layer temperature, Layer density, Layer dest)
     glBindTexture(GL_TEXTURE_2D, temperature.textureHandle);
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, density.textureHandle);
+    
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     resetState();
