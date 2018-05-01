@@ -1,12 +1,6 @@
 #include "main.h"
 
 GLuint createQuad() {
-//    float indices[] = {
-//        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-//        0.5f, -0.5f, 0.0f,  1.0f, 0.0f,
-//        -0.5f, 0.5f, 0.0f,  0.0f, 1.0f,
-//        0.5f, 0.5f, 0.0f,   1.0f, 1.0f
-//    };
     
     float indices[] = {
         -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
@@ -14,17 +8,6 @@ GLuint createQuad() {
         -1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
         1.0f, 1.0f, 0.0f,   1.0f, 1.0f
     };
-    
-//    float indices[300000];
-//    for (int i = 0; i < 1000; ++i) {
-//        float xposition = i * 2.0f / 500 - 1.0f;
-//        for (int j = 0; j < 100; ++j) {
-//            float yposition = j * 2.0f / 500 - 0.1f;
-//            indices[3*(100 * i + j)] = xposition;
-//            indices[3*(100 * i + j) + 1] = yposition;
-//            indices[3*(100 * i + j) + 2] = 0.0f;
-//        }
-//    }
     
     unsigned int VAO, VBO;
     glGenVertexArrays(1, &VAO);

@@ -15,7 +15,7 @@ void main() {
     float right = texelFetchOffset(Pressure, X, 0, ivec2(1, 0)).r;
     float center = texelFetch(Pressure, X, 0).r;
     
-    vec2 oldV = texelFetch(Velocity, X, 0).xy;
+    vec2 original_velocity = texelFetch(Velocity, X, 0).xy;
     vec2 gradient = vec2(right - left, up - down) * GradientScale;
-    FragColor = oldV - gradient;
+    FragColor = original_velocity - gradient;
 }

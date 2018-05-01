@@ -9,7 +9,6 @@ uniform vec3 fillColor;
 uniform vec2 scale;
 
 void main() {
-//    float s = texture(Sampler, gl_FragCoord.xy * scale).r;
     float s = texture(Sampler, TexCoords * scale).r;
     FragColor = vec4(fillColor, s);
 }

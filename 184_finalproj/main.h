@@ -28,7 +28,7 @@ typedef struct Vector2D_ {
 // settings
 static const int pos = 0;
 static const unsigned int SCR_WIDTH = 800;
-static const unsigned int SCR_HEIGHT = 600;
+static const unsigned int SCR_HEIGHT = 1600;
 static const float TimeStep = 0.125f;
 static const float GradientScale = 1.125f / DX;
 static const float NormalTemp = 0.0f;
@@ -46,7 +46,6 @@ TwoLayer createTwoLayer(GLsizei width, GLsizei height, int numComponents);
 GLuint createQuad();
 void resetLayer(Layer layer, float val);
 void createPrograms();
-
 void swapLayers(TwoLayer* twolayer);
 void resetState();
 void advection(Layer velocity, Layer src, Layer dest, float dissipation);
