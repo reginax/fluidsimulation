@@ -67,9 +67,9 @@ int main()
     
     // main render loop
     while(!glfwWindowShouldClose(window)) {
-        glViewport(0, 0, width, height);
         glfwGetFramebufferSize(window, &width, &height);
-
+        glViewport(0, 0, width, height);
+        
         // rendering
         visualizer.use();
         
@@ -85,6 +85,7 @@ int main()
         glBindVertexArray(QuadVAO);
         
         // update information
+        glfwGetFramebufferSize(window, &width, &height);
         glViewport(0, 0, width, height);
         advection(Velocity.A, Velocity.A, Velocity.B, VelocityDissipation);
         swapLayers(&Velocity);
@@ -99,7 +100,7 @@ int main()
         computeDivergence(Velocity.A, Divergence);
         resetLayer(Pressure.A, 0.0f);
         resetLayer(Pressure.B, 0.0f);
-        for (int i = 0; i < 40; ++i) {
+        for (int i = 0; i < 60; ++i) {
             jacobi(Pressure.A, Divergence, Pressure.B);
             swapLayers(&Pressure);
         }
@@ -107,8 +108,8 @@ int main()
         swapLayers(&Velocity);
 
         glBindTexture(GL_TEXTURE_2D, Density.A.textureHandle);
-        glUniform3f(fillColor, 0.8f, 0.2f, 0.4f);
-        glUniform2f(scale, 1.0f / 800, 1.0f / 600);
+        glUniform3f(fillColor, 0.2f, 0.2f, 0.4f);
+        glUniform2f(scale, 1.0f / width, 1.0f / height);
         
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
