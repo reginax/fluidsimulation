@@ -1,6 +1,9 @@
 #include "main.h"
+//#include "vector2D.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void processInput(GLFWwindow *window);
 
 // settings
@@ -36,9 +39,22 @@ int main()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    
+
     static int width, height;
     glfwGetFramebufferSize(window, &width, &height);
+
+    // glfw cursor creation
+    GLFWcursor* cursor = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+    if (cursor == NULL)
+    {
+        std::cout << "Failed to create GLFW standard cursor" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+    
+    // glfw cursor + mouse callback functions
+    glfwSetCursorPosCallback(window, cursor_position_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
     
     Velocity = createTwoLayer(SCR_WIDTH, SCR_HEIGHT, 2);
     Density = createTwoLayer(SCR_WIDTH, SCR_HEIGHT, 1);
@@ -119,7 +135,7 @@ int main()
     }
 
     glDeleteVertexArrays(1, &QuadVAO);
-    glfwTerminate();
+    glfwTerminate(); // also destroys all cursors remaining
     return 0;
 }
 
@@ -134,4 +150,30 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+}
+
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+//    std::cout << "cursor moved:   " << xpos << " | " << ypos << std::endl;
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    // mods check if Shift, Control, Alt, or SUper keys were held down
+    // ref: http://www.glfw.org/docs/latest/group__mods.html
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
+        std::cout << "mouse clicked!" << std::endl;
+        
+        // UNCOMMENT THE LINES BELOW TO DROP INTERACTIVE RED DOTS
+        
+//        // get cursor position
+//        double xpos, ypos;
+//        glfwGetCursorPos(window, &xpos, &ypos);
+//        Vector2D CursorPosition = Vector2D_{(int)xpos, (int)ypos};
+//        applyImpulse(Temperature.A, CursorPosition, ImpulseTemp);
+//        applyImpulse(Density.A, CursorPosition, ImpulseDensity);
+//
+        // UNCOMMENT THE LINES ABOVE TO DROP INTERACTIVE RED DOTS
+    }
 }
