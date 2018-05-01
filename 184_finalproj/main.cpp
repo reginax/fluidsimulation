@@ -23,7 +23,7 @@ int main()
     
     // glfw window creation
     
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Smokey the Sim - Only you can help prevent forest fires", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -113,11 +113,8 @@ int main()
         swapLayers(&Density);
         applyBuoyancy(Velocity.A, Temperature.A, Density.A, Velocity.B);
         swapLayers(&Velocity);
-        if (first) {
-            applyImpulse(Temperature.A, ImpulsePosition, ImpulseTemp, DrawRadius);
-            applyImpulse(Density.A, ImpulsePosition, ImpulseDensity, DrawRadius);
-//            first = false;
-        }
+        applyImpulse(Temperature.A, ImpulsePosition, ImpulseTemp, DrawRadius);
+        applyImpulse(Density.A, ImpulsePosition, ImpulseDensity, DrawRadius);
         computeDivergence(Velocity.A, Divergence);
         resetLayer(Pressure.A, 0.0f);
         resetLayer(Pressure.B, 0.0f);
@@ -159,7 +156,13 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-//    std::cout << "cursor moved:   " << xpos << " | " << ypos << std::endl;
+    std::cout << "cursor moved:   " << xpos << " | " << ypos << std::endl;
+    int state = glfwGetKey(window, GLFW_MOUSE_BUTTON_LEFT);
+    if (state == GLFW_PRESS) {
+        Vector2D CursorPosition = Vector2D_{(int)(xpos * 2.0), (int)SCR_HEIGHT - (int)(ypos * 2) + 100};
+        applyImpulse(Temperature.A, CursorPosition, ImpulseTemp, DrawRadius/2.0);
+        applyImpulse(Density.A, CursorPosition, ImpulseDensity, DrawRadius/2.0);
+    }
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -177,9 +180,12 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         glfwGetCursorPos(window, &xpos, &ypos);
         std::cout << xpos << std::endl;
         std::cout << ypos << std::endl;
-        Vector2D CursorPosition = Vector2D_{(int)xpos, (int)(SCR_HEIGHT/2) - (int)ypos};
-        applyImpulse(Temperature.A, CursorPosition, ImpulseTemp, DrawRadius/4.0);
-        applyImpulse(Density.A, CursorPosition, ImpulseDensity, DrawRadius/4.0);
+        // for retina screens
+        Vector2D CursorPosition = Vector2D_{(int)(xpos * 2.0), (int)SCR_HEIGHT - (int)(ypos * 2) + 100};
+        // for non-retina screens
+//        Vector2D CursorPosition = Vector2D_{(int)(xpos), (int)(SCR_HEIGHT) - (int)(ypos)};
+        applyImpulse(Temperature.A, CursorPosition, ImpulseTemp, DrawRadius/2.0);
+        applyImpulse(Density.A, CursorPosition, ImpulseDensity, DrawRadius/2.0);
 //
         // UNCOMMENT THE LINES ABOVE TO DROP INTERACTIVE RED DOTS
     }
