@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+</style>
+<title>CS 184 Final Report</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+</head>
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2018</h1>
+<h2 align="middle">Final Report | Smoke: A 2D fluid simulation</h2>
+
+<body>
+<br/>
+<section id="proposal">
+    <h3>Abstract</h3>
+
+    <div class="padded">
+        <p>This project is an interactive smoke simulator that utilizes the physics described by the Navier-Stokes equations to provide a realistic simulation of the effects of advection on a fluid. This project utilizes GLSL fragment shaders in order to perform the mathematical calculations necessary in order to generate the physics, and by tracking the mouse movements as well as clicks, has interactivity in creating smoke wherever the user desires.
+        </p>
+      <h3>Technical Approach</h3>
+        <p>We implemented the Navier-Stokes equations to model fluid simulation. At each time step, three quantities are updated for the state of the fluid: the Velocity, the Density, and the Temperature. These not only help us describe the state of the fluid, but also track important values, from which we can derive Pressure and Divergence, which gets us to our end goal of starting with a divergence-free velocity field and ending with a divergence-free velocity field at the next time step.
+        </p>
+        <p>As a quick overview of our flow of information, we begin with a velocity field of all 0’s, a temperature field set to the normal temperature (also 0 in our simulation) and a density field set to 0 (since there’s no fluid as of yet). We then apply a loop where we calculate the values of Velocity, Density, and Temperature after the advection from the velocity field. Calculations are made by calling a specialized function for each action that sets the uniforms for the shaders to different values, and then lets the fragment shaders do their thing. We then apply the outside forces of buoyancy and impulses (which is where we introduce the fluid on the first iteration of the loop), calculate divergences in the velocity field, and set the Pressure field using Jacobian iteration, which starts at 0 but continues to estimate until it converges to a fairly accurate value. Using these values we’ve calculated, we can then find the divergence-free velocity, which is the end goal of these loops.
+        </p>
+      <h3>Techniques Used</h3>
+        <p>We used the Render-to-Texture method in order to both read from a texture and use a texture as a framebuffer for the results after we perform our calculations. This utilizes two textures as part of a single value, like Temperature, Density, or Velocity. To effectively sort this out, we used a struct in order to put two of these textures into one object, with a texture A and a texture B as part of the final object. This way, we can simply swap between texture A and texture B (commonly called “ping-ponging” in papers we referenced) when we finish reading A and writing to B, in order to set A up for writing and B up for reading.
+        <br>
+        We also used uniforms to pass information into the fragment shaders, where we did the bulk of the calculations necessary. The cpp code was mainly used just to pass in the correct information into the uniforms - no calculations were performed within the cpp code.
+        <br>We drew our texture on top of a simple quad, which is a technique often noted on outside sources as a way to easily put the texture onto a rendered screen.
+        <br>We carry color throughout our simulation through the usage of densities, which is a value that we can also advect along with the velocities we find. We can say that the more dense an area is, the more color should be there. This can be represented by the usage of the alpha value in the RGBA model, which has the transparency/opacity of a color be represented by the final alpha value.
+        <br>To produce the interesting smoke effects, we used a dissipation model that slowly took away from the value of density and temperature, to have everything slowly even out over time. This, combined with the color carrying we do through densities, makes it possible to have cool smoke eddies as in found in our simulation.
+        <br>Outside of implementation, we also used a heavily modularized codebase, which let us write easy to read code in our main functions while not compromising our ability to write flexible functions in order to cover the usage cases. This includes having all the shader programs be organized under a single Programs struct, which let us easily access the shader programs and kept them well organized, so it was clear when we were using a shader program vs. using a general function, especially when many functions had similar naming conventions.
+        </p>
+      <h3>Algorithms Implemented</h3>
+        <p>In order to render fast and stable fluid simulation, we used the Navier-Stokes equations for incompressible flow, as featured in Mark Harris’ <a href="http://developer.download.nvidia.com/books/HTML/gpugems/gpugems_ch38.html" target="_blank">chapter on “Fast Fluid Dynamic Simulations on the GPU”</a>, to capture the changes of velocity for each smoke particle over time. This was a very helpful guide in giving us the base mathematics needed in order to get our physics in the simulation going.
+        <br>We used a 2-dimensional vector field to represent our fluid, and the velocities stored in this vector field help us iterate through the different states of our fluid (smoke, in this case) by advection, allowing us to update the motion of the fluid.
+        <br>The first Navier-Stokes equation gives the change of velocity vector u with respect to time t. The right hand side of the equation has four components that essentially gather the velocities for the current time step that come as a result of temperature, pressure, diffusion, and external forces. In particular, the third term on the right hand side reflects the velocities from viscous diffusion, but since we are rendering smoke, this term is set to zero.
+        <br>The second Navier-Stokes equation provides the condition that the fluid is incompressible and remains constant. This term is used in the derivation to compute the pressure values in the second term in equation 1.
+        <br>To explain the remaining terms in the equation 1, we’ll begin stepping through our general algorithm. We run a update loop that first calculates, due to advection, values of temperature, density, and velocity itself, which is represented by the first term in equation 1. Advection here is the flow of a thing (either temperature, density, or velocity itself) via the various velocities in the fluid, being “carried” by the velocities, so to speak. Then, we calculate buoyancy and impulses, which are external forces such as those due to temperature and density, and these forces are reflected in the fourth term in equation 1. Buoyancy here is affected by the temperature of the fluid we’re working with - the hotter an area is, the more buoyant it will be, relative to the ambient temperature of the area around it. Impulses are where we unsettle the base velocity, temperature, and density fields, such as from the infinite smoke producer found in the bottom section of the screen, or from the mouse clicks that produce new bubbles of smoke. We set the values of density and temperature within the radii of the circles surrounding the mouse clicks, and thereby start the process of having the buoyancy carry the fluid upwards and the density begin to dissipate. The collection of velocities are divergent, so we compute the amount of divergence, and using that value and equation 2, we use Jacobi iteration to calculate the pressure value (represented by the second term in equation 1). After about 60 iterations, we are reasonably certain to have a reasonably convergent pressure term, and we subtract the gradient from the velocities to end up with a divergence-free velocity, which means the amount of fluid entering a certain area is equivalent to the amount of fluid exiting that area. Thus, with a divergence-free velocity, which is what we assumed we started with, we can say that we’ve reached the end of an iteration, and can iterate once more.
+      </p>
+    <h3>How approach varied (subset, change/enhance)</h3>
+    <p>We originally attempted this problem from the point of view of building something like <a href="http://austinhle.com/cs184proj-report" target="_blank">Austin Le’s FlickFlow project</a> from a few years ago, which used the Navier Stokes equations to build a fluid like water. After a few iterations, we decided that an interesting way to adapt this simulation would be to have advection occur naturally, without user intervention, and we determined that buoyancy would be a great way to do this. After this, we realized that a buoyant fluid really just resembled smoke, and we approached it after that from a smoke simulation point of view.
+</p>
+  <h3>Unique decisions </h3>
+  <p>One of the decisions we made was to have an infinite smoke producer in the simulation. In many fluid simulations seen as examples in class, like Austin Le’s FlickFlow, the fluid is just a background that is distorted by user input. We wanted it to be a little more autonomous, and so with an infinite smoke producer, producing a large quantity in a regular formation and amount, we can see the eddies in the smoke. However, we still have the drag-checking of the mouse producing smoke, in order to show the effects of the advection velocity field on even new smoke produced.
+</p>
+<h3>Problems encountered and resolutions</h3>
+<ol><li>The initial setup for the project was very difficult, since it seemed like the openGL code used for prior projects was rather specialized for the tasks they were implemented for. With our unfamiliarity with the openGL layout, we didn’t know where to start, and resorted to slowly following the LearnOpenGL tutorials, which, after several hours and careful scrutiny, did help us go through with our renders.
+</li><li>We encountered an issue when having to swap between textures, which seemed to be confusing if we initialized too many textures. We solved this by using the TwoLayer struct that held two textures, which made it easy to keep track of the textures.
+</li><li>The Macbook retina screen pixel difference as compared to the normal screens gave us some issues, since we coded some values to set our screen sizes to be a certain way. We fixed this through some fancy mathematic juggling, and have two sets of code for finding the cursor position in main.cpp, one built for retina screen renderings, and one built for normal screen renderings, which can be swapped between depending on the screen you’re viewing this on.
+</li>
+</ol>
+<h3>Lessons Learned</h3>
+<p>We learned to not underestimate the challenges of setting up and running a basic graphics program, especially with MacOS, such as rendering to a Retina Display. Getting all the moving pieces to work together to produce even a simple image is difficult and time consuming, and we definitely should have started sooner to have more time to get used to the language and framework, as well as more time to debug any setup problems.
+  <br><br>There were definitely lots of resources out there that helped us:
+
+    <ol>
+         <li>Understanding the math behind fluid simulation representation, specifically the Navier-Stokes equations, which are fairly math heavy and take more than just a cursory scan to fully understand (which we’re not sure we even do at this point)</li>
+         <li>Learning the basics of using the graphics libraries (LearnOpenGL)</li>
+         <li>General inspiration for what features we were interested in (ShaderToy), e.g. the dragging the cursor to create smoke trails or creating an infinite smoke producer for more interesting effects.</li>
+    </ol>We learned how to write much more complex GLSL shaders, which we had only a cursory review of in project 3-2 and project 4. These shaders used functions to get not only the sampled point from a texture, but the points around the sampled point as well, which were needed in several equations in the process of calculation.
+  <br><br>We also learned about the entire OpenGL pipeline, which is much more complex than we anticipated, through not only the setup of the window and the initializing of the shader programs by linking fragment and vertex shaders, but also the linking of textures to framebuffers, the application of equations onto textures, the passing of information into shaders, and the render loop of textures.
+    </p>
+  <h3> Results</h3>
+  <video width="320" height="240" controls>
+    <source src="interaction2_cs184.mp4" type="video/mp4">
+  </video>
+  <h3> References</h3>
+  <ul>
+    <li>GPU Gems Chapter 38. <a href="http://developer.download.nvidia.com/books/HTML/gpugems/gpugems_ch38.html" target="_blank">Fast Fluid Dynamics Simulation on the GPU</a></li>
+    <li> <a href="http://jamie-wong.com/2016/08/05/webgl-fluid-simulation/" target="_blank">WebGL Fluid Simulation</a></li>
+    <li><a href="https://learnopengl.com/" target="_blank">Learn OpenGL</a></li>
+  </ul>
+
+
+  <h3>Team Contributions</h3>
+  <p>Everyone helped by setting up GLFW on XCode, which definitely was a complete struggle, and everyone went through LearnOpenGL tutorials in order to learn about how the basic framework would work, and to help each other
+    <ul>
+
+      <li>Karen: Parsed the Navier-Stokes equations (from the GPU Gems paper) and broke them down into easier to understand chunks for implementation into the fragment shaders. Added mouse interactivity through tracking mouse positions, which was used later to produce additional smoke bubbles. Helped in creating the OpenGL framework.
+      </li><li>Richard: Created OpenGL framework (with much help from LearnOpenGL and Stack Overflow) and set up the entire rendering pipeline, including the TwoLayer and Layer data structures, as well as the various fragment and vertex shaders used to compute the Navier-Stokes equations for the physics of the simulation. Additionally, expanded on Karen’s work on mouse interactivity to include mouse clicking and mouse dragging to create additional smoke. Also created the Programs struct in order to hold all the programs created for easy access and simple organization. Did the video work for both the milestone as well as final video submissions.
+      </li><li>Regina: Helped in creating the OpenGL framework and the formatting for the various parts of the framework. Set up the final site for viewing the project, as well as took leadership by organizing everyone into tasks through frequent usage of the Google Drive and the Messenger group.
+      </li>
+    </ul>
+    </p>
+  </section>
+</div>
+</body>
+</html>
