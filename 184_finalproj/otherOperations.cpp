@@ -47,13 +47,12 @@ void advection(Layer velocity, Layer src, Layer dest, float dissipation) {
     glUseProgram(prog);
     
     GLint inverseSize = glGetUniformLocation(prog, "InverseSize");
-    GLint timeStep = glGetUniformLocation(prog, "TimeStep");
-    GLint dissip = glGetUniformLocation(prog, "Dissipation");
-    GLint source = glGetUniformLocation(prog, "Source");
-    
     glUniform2f(inverseSize, 1.0f / SCR_WIDTH, 1.0f / SCR_HEIGHT);
+    GLint timeStep = glGetUniformLocation(prog, "TimeStep");
     glUniform1f(timeStep, TimeStep);
+    GLint dissip = glGetUniformLocation(prog, "Dissipation");
     glUniform1f(dissip, dissipation);
+    GLint source = glGetUniformLocation(prog, "Source");
     glUniform1i(source, 1);
     
     glBindFramebuffer(GL_FRAMEBUFFER, dest.frameBufferHandle);
@@ -77,11 +76,10 @@ void jacobi(Layer pressure, Layer divergence, Layer dest) {
     glUseProgram(prog);
     
     GLint alpha = glGetUniformLocation(prog, "Alpha");
-    GLint inverseBeta = glGetUniformLocation(prog, "InverseBeta");
-    GLint divLoc = glGetUniformLocation(prog, "Divergence");
-    
     glUniform1f(alpha, -DX * DX);
+    GLint inverseBeta = glGetUniformLocation(prog, "InverseBeta");
     glUniform1f(inverseBeta, 0.25f);
+    GLint divLoc = glGetUniformLocation(prog, "Divergence");
     glUniform1i(divLoc, 1);
     
     glBindFramebuffer(GL_FRAMEBUFFER, dest.frameBufferHandle);
@@ -105,11 +103,10 @@ void subtractGradient(Layer velocity, Layer pressure, Layer dest) {
     glUseProgram(prog);
     
     GLint gradientScale = glGetUniformLocation(prog, "GradientScale");
-    GLint sampler = glGetUniformLocation(prog, "Pressure");
-    GLint inverseDX2 = glGetUniformLocation(prog, "InverseDX2");
-    
     glUniform1f(gradientScale, GradientScale);
+    GLint sampler = glGetUniformLocation(prog, "Pressure");
     glUniform1i(sampler, 1);
+    GLint inverseDX2 = glGetUniformLocation(prog, "InverseDX2");
     glUniform1f(inverseDX2, 0.5f / DX);
     
     glBindFramebuffer(GL_FRAMEBUFFER, dest.frameBufferHandle);
@@ -152,11 +149,10 @@ void applyImpulse(Layer dest, Vector2D position, float value, float radius) {
     glUseProgram(prog);
     
     GLint pointLoc = glGetUniformLocation(prog, "point");
-    GLint radLoc = glGetUniformLocation(prog, "radius");
-    GLint fillColorLoc = glGetUniformLocation(prog, "fillColor");
-    
     glUniform2f(pointLoc, (float) position.x, (float) position.y);
+    GLint radLoc = glGetUniformLocation(prog, "radius");
     glUniform1f(radLoc, radius);
+    GLint fillColorLoc = glGetUniformLocation(prog, "fillColor");
     glUniform3f(fillColorLoc, value, value, value);
     
     glBindFramebuffer(GL_FRAMEBUFFER, dest.frameBufferHandle);
@@ -171,19 +167,19 @@ void applyBuoyancy(Layer velocity, Layer temperature, Layer density, Layer dest)
     glUseProgram(prog);
     
     GLint tempLoc = glGetUniformLocation(prog, "Temperature");
-    GLint densLoc = glGetUniformLocation(prog, "Density");
-    GLint normalTemp = glGetUniformLocation(prog, "NormalTemp");
-    GLint timeStep = glGetUniformLocation(prog, "TimeStep");
-    GLint buoyancy = glGetUniformLocation(prog, "Buoyancy");
-    GLint weight = glGetUniformLocation(prog, "Weight");
-    
     glUniform1i(tempLoc, 1);
+    GLint densLoc = glGetUniformLocation(prog, "Density");
     glUniform1i(densLoc, 2);
+    GLint normalTemp = glGetUniformLocation(prog, "NormalTemp");
     glUniform1f(normalTemp, NormalTemp);
+    GLint timeStep = glGetUniformLocation(prog, "TimeStep");
     glUniform1f(timeStep, TimeStep);
+    GLint buoyancy = glGetUniformLocation(prog, "Buoyancy");
     glUniform1f(buoyancy, SmokeBuoyancy);
+    GLint weight = glGetUniformLocation(prog, "Weight");
     glUniform1f(weight, SmokeWeight);
-    
+
+
     glBindFramebuffer(GL_FRAMEBUFFER, dest.frameBufferHandle);
     
     glActiveTexture(GL_TEXTURE0);
@@ -206,7 +202,7 @@ void applyBuoyancy(Layer velocity, Layer temperature, Layer density, Layer dest)
 
 GLuint createQuad() {
     
-    float indices[] = {
+    float indices[] = { // first three are vertex indices, last two are texture coordinates, for each row
         -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
         1.0f, -1.0f, 0.0f,  1.0f, 0.0f,
         -1.0f, 1.0f, 0.0f,  0.0f, 1.0f,

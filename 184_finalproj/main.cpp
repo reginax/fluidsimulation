@@ -1,5 +1,4 @@
 #include "main.h"
-//#include "vector2D.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
@@ -64,12 +63,6 @@ int main()
     Temperature = createTwoLayer(SCR_WIDTH, SCR_HEIGHT, 1);
     Divergence = createLayer(SCR_WIDTH, SCR_HEIGHT, 3);
     
-//    Velocity = createTwoLayer(width, height, 2);
-//    Density = createTwoLayer(width, height, 1);
-//    Pressure = createTwoLayer(width, height, 1);
-//    Temperature = createTwoLayer(width, height, 1);
-//    Divergence = createLayer(width, height, 3);
-    
     createPrograms();
     
     // build and compile our various shader programs
@@ -95,12 +88,9 @@ int main()
         
         processInput(window);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        
-        GLint fillColor = glGetUniformLocation(visualizer.ID, "fillColor");
-        GLint scale = glGetUniformLocation(visualizer.ID, "scale");
         glEnable(GL_BLEND);
 
-        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         glBindVertexArray(QuadVAO);
         
@@ -127,6 +117,9 @@ int main()
         subtractGradient(Velocity.A, Pressure.A, Velocity.B);
         swapLayers(&Velocity);
 
+        GLint fillColor = glGetUniformLocation(visualizer.ID, "fillColor");
+        GLint scale = glGetUniformLocation(visualizer.ID, "scale");
+        
         glBindTexture(GL_TEXTURE_2D, Density.A.textureHandle);
         glUniform3f(fillColor, 0.2f, 0.2f, 0.4f);
         glUniform2f(scale, 1.0f / width, 1.0f / height);
@@ -158,11 +151,13 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-    std::cout << "cursor moved:   " << xpos << " | " << ypos << std::endl;
-    int state = glfwGetKey(window, GLFW_MOUSE_BUTTON_LEFT);
-//    if (state == GLFW_PRESS) {
+    // tracking drag of mouse cursor
+//    std::cout << "cursor moved:   " << xpos << " | " << ypos << std::endl;
     if (pressed) {
+        // for retina screens (comment out if not)
         Vector2D CursorPosition = Vector2D_{(int)(xpos * 2.0), (int)SCR_HEIGHT - (int)(ypos * 2) + 100};
+        // for non-retina screens (comment out if not)
+//        Vector2D CursorPosition = Vector2D_{(int)(xpos), (int)(SCR_HEIGHT/2)-(int)(ypos) + 100};
         applyImpulse(Temperature.A, CursorPosition, ImpulseTemp, DrawRadius/2.0);
         applyImpulse(Density.A, CursorPosition, ImpulseDensity, DrawRadius/2.0);
     }
@@ -175,23 +170,18 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     if (button == GLFW_MOUSE_BUTTON_LEFT) {
         if (action == GLFW_PRESS) {
             pressed = true;
-            std::cout << "mouse clicked!" << std::endl;
-            
-            // UNCOMMENT THE LINES BELOW TO DROP INTERACTIVE RED DOTS
-            
+//            std::cout << "mouse clicked!" << std::endl;
             // get cursor position
             double xpos, ypos;
             glfwGetCursorPos(window, &xpos, &ypos);
-            std::cout << xpos << std::endl;
-            std::cout << ypos << std::endl;
-            // for retina screens
+//            std::cout << xpos << std::endl;
+//            std::cout << ypos << std::endl;
+            // for retina screens (comment out if not)
             Vector2D CursorPosition = Vector2D_{(int)(xpos * 2.0), (int)SCR_HEIGHT - (int)(ypos * 2) + 100};
-            // for non-retina screens
-    //        Vector2D CursorPosition = Vector2D_{(int)(xpos), (int)(SCR_HEIGHT) - (int)(ypos)};
+            // for non-retina screens (comment out if not)
+//            Vector2D CursorPosition = Vector2D_{(int)(xpos), (int)(SCR_HEIGHT/2)-(int)(ypos) + 100};
             applyImpulse(Temperature.A, CursorPosition, ImpulseTemp, DrawRadius/2.0);
             applyImpulse(Density.A, CursorPosition, ImpulseDensity, DrawRadius/2.0);
-    //
-            // UNCOMMENT THE LINES ABOVE TO DROP INTERACTIVE RED DOTS
         } else {
             pressed = false;
         }

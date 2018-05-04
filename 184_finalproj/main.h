@@ -26,7 +26,6 @@ typedef struct Vector2D_ {
 #define DrawRadius (100.0f)
 
 // settings
-static const int pos = 0;
 static const unsigned int SCR_WIDTH = 800;
 static const unsigned int SCR_HEIGHT = 1600;
 static const float TimeStep = 0.125f;
